@@ -1,9 +1,8 @@
 Chats = new Meteor.Collection("Chats");
-Contacts = new Meteor.Collection("Contacts");
-
+Meteor.subscribe("userData");
 
 Template.contacts.contacts = function () {
-  return Contacts.find({});
+  return Meteor.user().contacts;
 };
 /* The Chats Router
  * It will handle requests to URLs in the form of /:chatId,

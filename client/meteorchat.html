@@ -5,24 +5,31 @@
 <body>
 
 	<!-- Hidable/showable sidebar with contacts -->
-	<aside id="side-pane">
+	<aside id="side-pane" class="slide">
 		{{> contacts}}
+		{{> settings}}
 	</aside>
-	<section id="main-pane">
-		{{loginButtons}}
+	<section id="main-pane" class="slide">
+		
+		<header id="nav-header">
+			<div style="float: right">
+			{{loginButtons  align="right"}}
+			</div>
+		</header>
 		{{#if currentUser}}
 			{{> chat}}
 		{{/if}}
-	</section>
+
+	</section
 </body>
 <template name="contacts">
 
 	{{#if currentUser}}
-	<h3>Contacts</h3>
+	<div class="seperator">CONTACTS</div>
 	<div id="contacts">
 		{{#each contacts}}
-			<div class="contact">
-				{{name}}
+			<div class="item">
+				{{this}}
 			</div>
 		{{/each}}
 	</div>
@@ -34,6 +41,10 @@
 	<div class="modal">
 		<div class="modal-header"></div>
 	</div>	
+</template>
+
+<template name="settings">
+	<div class="seperator">SETTINGS</div>
 </template>
 
 <template name="chat">
