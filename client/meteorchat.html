@@ -1,51 +1,64 @@
 <head>
-  <title>meteorchat</title>
+	<title>Meteorchat</title>
 </head>
-
 <body>
-
-	<!-- Hidable/showable sidebar with contacts -->
-	<aside id="side-pane" class="slide">
-		{{> contacts}}
-		{{> settings}}
+	<aside>
+		<menu id="contacts" label="contacts" type="list">
+			<li><a href="#" class="contact">Dirk Maas</a></li>
+			<li><a href="#" class="contact">Berend van Deelen</a></li>
+			<li><a href="#" class="contact">Joyce Vrenken</a></li>
+		</menu>
 	</aside>
-	<section id="main-pane" class="slide">
-		
-		<header id="nav-header">
-			<div style="float: right">
-			{{loginButtons  align="right"}}
-			</div>
+	<section>
+		<header>
+			<h1>Dirk Maas</h1>
 		</header>
-		{{#if currentUser}}
-			{{> chat}}
-		{{/if}}
-
-	</section
+		<ol><!-- an ordered list of messages, ordered by time -->
+			<li>
+				<article>
+					<header>
+						<h2>Arian van Putten</h2>
+						<time pubtime="" datetime="2013-03-12T00:00:00.000Z">Tue Mar 12 2013 01:00:00 GMT+0100 (CET)</time>
+					</header>
+					<p>Yo Dirk</p>
+				</article>
+			</li>
+			<li>
+				<article>
+					<header>
+						<h2>Dirk Maas</h2>
+						<time pubtime="" datetime="2013-03-12T00:01:00.000Z">Tue Mar 12 2013 01:01:00 GMT+0100 (CET)</time>
+					</header>
+					<p>Hey Ari</p>
+				</article>
+			</li>
+			<li>
+				<article>
+					<header>
+						<h2>Dirk Maas</h2>
+						<time pubtime="" datetime="2013-03-12T00:02:00.000Z">Tue Mar 12 2013 01:02:00 GMT+0100 (CET)</time>
+					</header>
+					<p>Alles goed?</p>
+				</article>
+			</li>
+			<li>
+				<article>
+					<header>
+						<h2>Arian van Putten</h2>
+						<time pubtime="" datetime="2013-03-12T00:03:00.000Z">Tue Mar 12 2013 01:03:00 GMT+0100 (CET)</time>
+					</header>
+					<p>Jottem, ik werk aan Informatica</p>
+				</article>
+			</li>
+			<li>
+				<article>
+					<header>
+						<h2>Dirk Maas</h2>
+						<time pubtime="" datetime="2013-03-12T00:04:00.000Z">Tue Mar 12 2013 01:04:00 GMT+0100 (CET)</time>
+					</header>
+					<p>Cool man!</p>
+				</article>
+			</li>
+		</ol>
+	</section>
 </body>
-<template name="contacts">
-
-	{{#if currentUser}}
-	<div class="seperator">CONTACTS</div>
-	<div id="contacts">
-		{{#each contacts}}
-			<div class="item">
-				{{this}}
-			</div>
-		{{/each}}
-	</div>
-	{{/if}}
-
-</template>
-
-<template name="addContactDialog">
-	<div class="modal">
-		<div class="modal-header"></div>
-	</div>	
-</template>
-
-<template name="settings">
-	<div class="seperator">SETTINGS</div>
-</template>
-
-<template name="chat">
-</template>
