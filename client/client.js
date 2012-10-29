@@ -1,9 +1,7 @@
 Chats = new Meteor.Collection("Chats");
 Meteor.subscribe("userData");
 
-Template.contacts.contacts = function () {
-  return Meteor.user().contacts;
-};
+
 /* The Chats Router
  * It will handle requests to URLs in the form of /:chatId,
  * set the current chat id in localStorage to the chatId of the URL,
@@ -27,3 +25,9 @@ var ChatsRouter = Backbone.Router.extend({
 });
 
 Router = new ChatsRouter();
+
+
+// gets called when the DOM is ready
+Meteor.startup(function () {
+  $('body > aside, body > section').toggleClass('slide'); // debug
+});
