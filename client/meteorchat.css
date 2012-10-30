@@ -138,4 +138,59 @@ body {
 
 }
 
+#messages {
+	margin: 0;
+	padding: 0;
+}
+#messages > li {
+	list-style: none;
+	display: block;
+	margin-left: 28px;
+	margin-right: 28px;
+}
+#messages li.he {
+
+
+	background-color: yellow;
+
+}
+
+#messages li > article {
+	padding: 5px 5px 5px 5px;
+	margin: 10px 10px 10px 10px;
+}
+
+#messages li.he:before {
+	content:"";
+	position: absolute;
+	border-top: 10px solid yellow;
+	border-left: 28px solid transparent ;
+	left :0;
+	margin: 0;
+	display: block;
+	z-index: 1000;
+}
+
+#messages li.me {
+
+	background-color: #f8934f;;
+
+}
+
+#messages li.me:before {
+	content:"";
+	position: absolute;
+	border-top: 10px solid #f8934f;
+	border-right: 28px solid transparent ;
+	right:0px;
+	margin: 0;
+	display: block;
+	z-index: 1000;
+}
+
+#messages li > article {
+	padding: 5px 5px 5px 5px;
+	margin: 10px 10px 10px 10px;
+}
+
 
