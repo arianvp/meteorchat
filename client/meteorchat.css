@@ -7,10 +7,10 @@ body {
 	bottom: 0;
 	top: 0;
 
-	font-size: 14px;
-	line-height: 20px;
+	font-size: 12px;
+	line-height: 14px;
 	font-family: sans-serif;
-
+	background-image: url('http://subtlepatterns.subtlepatterns.netdna-cdn.com/patterns/stressed_linen.png');
 	overflow-x: hidden;
 
 }
@@ -138,21 +138,21 @@ body {
 
 }
 
+#main > header > h1 {
+	color: white;
+
+	margin: 0;
+}
+
 #messages {
 	margin: 0;
 	padding: 0;
 }
 #messages > li {
 	list-style: none;
+
+	margin: 5px 28px 5px 28px;
 	display: block;
-	margin-left: 28px;
-	margin-right: 28px;
-}
-#messages li.he {
-
-
-	background-color: yellow;
-
 }
 
 #messages li > article {
@@ -165,7 +165,28 @@ body {
 	position: absolute;
 	border-top: 10px solid yellow;
 	border-left: 28px solid transparent ;
-	left :0;
+	left: g0;
+	margin: 0;
+	display: block;
+	z-index: 1000;
+}
+
+#messages li.he {
+
+	background-color: rgb(180, 180, 180);
+
+}
+
+#messages li > article {
+	padding-top: 20px;
+}
+
+#messages li.he:before {
+	content:"";
+	position: absolute;
+	border-top: 10px solid rgb(180, 180, 180);
+	border-left: 28px solid transparent ;
+	left: 0px;
 	margin: 0;
 	display: block;
 	z-index: 1000;
@@ -173,24 +194,26 @@ body {
 
 #messages li.me {
 
-	background-color: #f8934f;;
+	background-color: rgb(220, 220, 220);
 
 }
 
 #messages li.me:before {
 	content:"";
 	position: absolute;
-	border-top: 10px solid #f8934f;
+	border-top: 10px solid rgb(220, 220, 220);
 	border-right: 28px solid transparent ;
-	right:0px;
+	right: 0px;
 	margin: 0;
 	display: block;
 	z-index: 1000;
 }
 
-#messages li > article {
-	padding: 5px 5px 5px 5px;
-	margin: 10px 10px 10px 10px;
+
+#messages article > header > time {
+	float:right;
+	font-size: 10px;
 }
-
-
+#messages article > header > h2 {
+	display: inline;
+}
