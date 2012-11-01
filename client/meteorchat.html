@@ -7,29 +7,21 @@
 		<h1>Contacts</h1>
 		<menu id="contacts" label="contacts" type="list">
 			<input id="search" type="search" placeholder="Search contacts...">
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Berend van Deelen</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Dirk Maas</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>
-			<li class="contact"><a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt=""><span>Joyce Vrenken</span></a></li>			
+			{{> contacts}}
 		</menu>
 		<h1>Settings</h1>
 		<menu id="settings" label="settings" type="list">
-			<li class="contact"><a href="#"><span>Logout</span></a></li>
+			<li class="item">
+				<a href="#">
+					<span>Logout</span>
+				</a>
+			</li>
 		</menu>
 	</aside>
 	<section id="main">
 		<header>
 			<h1>Dirk Maas</h1>
+			{{loginButtons}}
 		</header>
 		<ol id="messages"><!-- an ordered list of messages, ordered by time -->
 			<li class="me">
@@ -80,3 +72,29 @@
 		</ol>
 	</section>
 </body>
+
+
+<template name="contacts">
+	<input id="search" type="search" placeholder="Search contacts...">
+	{{#each contacts}}
+		<li class="item">
+			<a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt="">
+				<span>{{name}}</span>
+			</a>
+		</li>		
+	{{/each}}
+</template>
+
+<template name="messages">
+	{{#each messages}}
+		<li class="{{whichUser this}}">
+			<article>
+				<header>
+					<h2>{{name}}</h2>
+					<time pubtime datetime="{{timestamp}}">{{prettyDate timestamp}}</time>
+				</header>
+				<p>{{text}}</p>
+			</article>
+		</li>
+	{{/each}}
+</template>

@@ -1,6 +1,34 @@
 Chats = new Meteor.Collection("Chats");
 Meteor.subscribe("userData");
 
+Handlebars.registerHelper("whichUser", function  (message) {
+  if (message.sender == Meteor.userId()) {
+    return "me";
+  }  else {
+    return "he";
+  }
+});
+
+/*
+ * Retreives the contactlist from the database and feeds it to
+ * the contacts template, which will render the contacts in html
+ */
+Template.contacts.contacts = function () {
+  return [  {name: "Dirk Maas"},
+            {name: "Joyce Vrenken"},
+            {name: "Berend van Deelen"}
+    ];
+};
+
+/*
+ * Retreives the messages of the current chat from the database
+ * and feeds them to the messages template,
+ * which will render the messages in html
+ */
+Template.messages.messages = function () {
+
+};
+
 
 /* The Chats Router
  * It will handle requests to URLs in the form of /:chatId,
