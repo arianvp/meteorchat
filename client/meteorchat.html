@@ -7,7 +7,7 @@
 	<aside id="side-menu">
 		<h1>Contacts</h1>
 		<menu id="contacts" label="contacts" type="list">
-			<input id="search" type="search" placeholder="Search contacts...">
+			<button id="add-contact" type="button">Add contact</button>
 			{{> contacts}}
 		</menu>
 		<h1>Settings</h1>
@@ -31,13 +31,19 @@
 					{{> messages}}
 					
 				</ol>
+				<form id="send-message-form">
+					<input onkeypress="return event.keyCode!=13" type="text" placeholder="Write message">
+					<button type="button">Send</button>
+					</input>
+				</form>
 			{{else}} <!-- if We're not logged in -->
-				<form>
-					<input type="email" placeholder="Email">
-					<input type="password" placeholder="Password">
+				<!--<form>
+					<input id="email" type="email" placeholder="Email">
+					<input id="password" type="password" placeholder="Password">
 					<button id="login" type="button">Login</button>
 					<button id="create" type="button">Create</button>
-				</form>
+				</form>-->
+				{{loginButtons}}
 			{{/if}}
 		</div>
 	</section>
@@ -45,7 +51,6 @@
 
 
 <template name="contacts">
-	<input id="search" type="search" placeholder="Search contacts...">
 	{{#each contacts}}
 		<li class="item">
 			<a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt="">
@@ -70,6 +75,5 @@
 </template>
 
 <template name="header">
-	<button type="button" id="open-side-menu">Open</button>
-	<h1>{{name}}</h1>
+	<h1>{{username}}</h1>
 </template>

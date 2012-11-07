@@ -21,7 +21,7 @@ input[type="text"], input[type="search"], input[type="email"], input[type="passw
 	padding: 4px;
 	border: 1px solid #999;
 	border-radius: 3px;
-	line-height: 1;
+	line-height: 30px;
 	font-size: 12px;
 }
 
@@ -51,8 +51,8 @@ button {
 	padding: 4px;
 	border: 1px solid rgba(0,0,0,0.25);
 	border-radius: 3px;
-	line-height: 1;
-	font-size: 12px;
+	line-height: 30px;
+	font-size: 14px;
 
 
 }
@@ -78,7 +78,7 @@ button[disabled] {
 	/* make it 260px wide and  slide it -260px => out of screen
 	 * so we can make it slide into the screen when the menu is opened
 	 */
-	z-index: 10;
+
 	position: fixed;
 	top: 0;
 	bottom: 0;
@@ -157,20 +157,17 @@ button[disabled] {
 	color: #f0f0f0;
 }
 
-
-#search {
+#add-contact {
 	position: absolute;
 	top: 28px;
 	height: 26px;
 	left: 5px;
 	right: 5px;
-
 }
 
-
-
 #side-menu,
-#main {
+#main,
+#main > header {
 
 	overflow-y: auto;
 	/* the transition type and speed are set.
@@ -191,10 +188,13 @@ button[disabled] {
 #side-menu.slide {
 	left: 0px;
 }
+
+#main > header.slide,
 #main.slide {
 	left: 260px;
 
 }
+
 
 /* main screen styling */
 #main {
@@ -205,26 +205,47 @@ button[disabled] {
 	margin: 0;
 	top: 0;
 	bottom: 0;
-}
 
+}
 #main > header {
-	display: inline;
-	height: 48px;
-	position: absolute;
-	padding: 0 0 0 0;
+
+
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	z-index: 10;
-	background: -webkit-gradient(linear, left top, left bottom, from(#303030), to(#0d0d0d));
+
+	background-color:#393939;
+	background-image: -o-linear-gradient(#505050, #404040);
+	background-image: -ms-linear-gradient(#505050, #404040);
+	background-image: -moz-linear-gradient(#505050, #404040);
+	background-image: -webkit-linear-gradient(#505050, #404040);
+	background-image: linear-gradient(#505050,#404040);
+}
+
+#main {
+	box-shadow: 0 0 8px 0 black;
+	z-index: 8;
+}
+#main > header h1 {
+	padding-top: 0px;
+	color: #a5a5a5;
+	text-shadow:0 1px 0 rgba(0, 0, 0, .6);
 
 }
 
 
-
 #content {
-	margin: 0;
-	padding: 48px 0 0 0;
+	margin: 10px 0 0 0;
+	padding: 30px 0 50px 0;
+
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+#messages {
+	padding: 0;
 }
 
 
@@ -236,20 +257,13 @@ button[disabled] {
 }
 
 #messages li > article {
-	padding: 5px 5px 5px 5px;
-	margin: 10px 10px 10px 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin: 5px;
 }
 
-#messages li.he:before {
-	content:"";
-	position: absolute;
-	border-top: 10px solid yellow;
-	border-left: 28px solid transparent ;
-	left: 0;
-	margin: 0;
-	display: block;
-	z-index: 9;
-}
+
 
 #messages li.he {
 
@@ -257,35 +271,33 @@ button[disabled] {
 
 }
 
-#messages li > article {
-	padding-top: 8px
-}
-
 #messages li.he:before {
 	content:"";
-	position: absolute;
+	position: relative;
+	left: -28px;
+	height: 10px;
 	border-top: 10px solid rgb(180, 180, 180);
-	border-left: 28px solid transparent ;
-	left: 0px;
-	margin: 0;
-	display: block;
-	z-index: 9;
+	border-left: 28px solid transparent;
+	width: 100%;
+	display: inline-block;
 }
 
 #messages li.me {
-
 	background-color: rgb(220, 220, 220);
-
 }
 
 #messages li.me:before {
 	content:"";
-	position: absolute;
+	position: relative;
+	width:100%;
+	left: 0;
+	height: 10px;
+	padding: 0;
+	line-height: 0;
 	border-top: 10px solid rgb(220, 220, 220);
-	border-right: 28px solid transparent ;
-	right: 0px;
+	border-right: 28px solid transparent;
 	margin: 0;
-	display: block;
+	display: inline-block;
 	z-index: 9;
 }
 
@@ -296,5 +308,23 @@ button[disabled] {
 }
 #messages article > header > h2 {
 	display: inline;
+}
 
+#send-message-form {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 50px;
+}
+
+#send-message-form > input {
+	position: absolute;
+	left: 0;
+	right: 60px;
+}
+
+#send-message-form > button {
+	position: absolute;
+	width: 60px;
+	right: 0px;
 }

@@ -1,4 +1,4 @@
-Chats = new Meteor.Collection("Chats");
+
 Meteor.subscribe("userData");
 
 Handlebars.registerHelper("whichUser", function  (message) {
@@ -79,11 +79,45 @@ Template.messages.messages = function () {
       name: "Dirk Maas",
       timestamp: new Date(),
       text: "Trolololol"
+    },
+    {
+      name: "Dirk Maas",
+      timestamp: new Date(),
+      text: "Trolololol"
+    },
+    {
+      name: "Dirk Maas",
+      timestamp: new Date(),
+      text: "Trolololol"
+    },
+    {
+      name: "Dirk Maas",
+      timestamp: new Date(),
+      text: "Trolololol"
+    },
+    {
+      name: "Dirk Maas",
+      timestamp: new Date(),
+      text: "Trolololol"
+    },
+    {
+      name: "Dirk Maas",
+      timestamp: new Date(),
+      text: "Trolololol"
     }
+
+
+
+
+
+
   ];
 };
 
 
+Template.header.username = function () {
+  return "Dirk Maas";
+};
 /* The Chats Router
  * It will handle requests to URLs in the form of /:chatId,
  * set the current chat id in localStorage to the chatId of the URL,
@@ -109,11 +143,14 @@ var ChatsRouter = Backbone.Router.extend({
 Router = new ChatsRouter();
 
 
+
 // gets called when the DOM is ready
 Meteor.startup(function () {
   // debug
-  $("#open-side-menu").live('click', function(){
-    $("#main, #side-menu").toggleClass('slide');
+  $("#main > header").live('click', function() {
+    if (Meteor.user()) {
+      $("#main, #side-menu, #main > header").toggleClass('slide');
+    }
   });
   $("#login-button").live('click',function () {
     console.log("Ik log nu in jeweetzelluf");
@@ -123,6 +160,17 @@ Meteor.startup(function () {
       }
       console.log(err);
     });
+  });
+
+  $("#login").live("click", function () {
+    Meteor.loginWithPassword($("#email").val(), $("#password").val(), function (err) {
+      if (err) {
+
+      }
+    });
+  });
+  $("#create").live("click", function () {
+
   });
 
 

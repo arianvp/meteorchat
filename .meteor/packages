@@ -7,4 +7,4 @@ preserve-inputs
 backbone
 accounts-password
 accounts-ui-unstyled
-accounts-ui
+underscore
