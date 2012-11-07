@@ -3,6 +3,7 @@
 
 </head>
 <body>
+
 	<aside id="side-menu">
 		<h1>Contacts</h1>
 		<menu id="contacts" label="contacts" type="list">
@@ -11,8 +12,8 @@
 		</menu>
 		<h1>Settings</h1>
 		<menu id="settings" label="settings" type="list">
-			<li class="item">
-				<a href="#">
+			<li class="item" onclick="Meteor.logout()">
+				<a href="#" onclick="Meteor.logout()">
 					<span>Logout</span>
 				</a>
 			</li>
@@ -20,56 +21,25 @@
 	</aside>
 	<section id="main">
 		<header>
-			<h1>Dirk Maas</h1>
-			{{loginButtons}}
+			{{#if currentUser}}
+				{{>header}}
+			{{/if}}
 		</header>
-		<ol id="messages"><!-- an ordered list of messages, ordered by time -->
-			<li class="me">
-				<article>
-					<header>
-						<h2>Arian van Putten</h2>
-						<time pubtime="" datetime="2013-03-12T00:00:00.000Z">Tue Mar 12 2013 01:00:00 GMT+0100 (CET)</time>
-					</header>
-					<p>Yo Dirk</p>
-				</article>
-			</li>
-			<li class="he">
-				<article>
-					<header>
-						<h2>Dirk Maas</h2>
-						<time pubtime="" datetime="2013-03-12T00:01:00.000Z">Tue Mar 12 2013 01:01:00 GMT+0100 (CET)</time>
-					</header>
-					<p>Hey Ari</p>
-				</article>
-			</li>
-			<li class="he">
-				<article>
-					<header>
-						<h2>Dirk Maas</h2>
-						<time pubtime="" datetime="2013-03-12T00:02:00.000Z">Tue Mar 12 2013 01:02:00 GMT+0100 (CET)</time>
-					</header>
-					<p>Alles goed?</p>
-				</article>
-			</li>
-			<li class="me">
-				<article>
-					<header>
-						<h2>Arian van Putten</h2>
-						<time pubtime="" datetime="2013-03-12T00:03:00.000Z">Tue Mar 12 2013 01:03:00 GMT+0100 (CET)</time>
-					</header>
-					<p>Jottem, ik werk aan Informatica</p>
-				</article>
-			</li>
-			<li class="he">
-				<article>
-					<header>
-						<h2>Dirk Maas</h2>
-						<time pubtime="" datetime="2013-03-12T00:04:00.000Z">Tue Mar 12 2013 01:04:00 GMT+0100 (CET)</time>
-					</header>
-					<p>Cool man!</p>
-				</article>
-			</li>
-		</ol>
+		<div id="content">
+			{{#if currentUser}}
+				<ol id="messages"><!-- an ordered list of messages, ordered by time -->
+					{{> messages}}
+					
+				</ol>
+			{{else}} <!-- if We're not logged in -->
+				<form>
+					<input type="email" placeholder="Email">
+					<input type="password" placeholder="Password">
+					<button id="login" type="button">Login</button>
+					<button id="create" type="button">Create</button>
+				</form>
+			{{/if}}
+		</div>
 	</section>
 </body>
 
@@ -97,4 +67,9 @@
 			</article>
 		</li>
 	{{/each}}
+</template>
+
+<template name="header">
+	<button type="button" id="open-side-menu">Open</button>
+	<h1>{{name}}</h1>
 </template>
