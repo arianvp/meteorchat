@@ -1,5 +1,10 @@
 Chats = new Meteor.Collection("Chats");
 
+/*
+By default, you cannot modify a collection (insert, update, remove).
+We will have to specify specific behaviour for when the clients does
+have to  modify a collection 
+*/
 
 Chats.allow({
 	insert: function (userId, chat) {
@@ -14,11 +19,6 @@ Chats.allow({
 		return false;
 	}
 });
-/*
-By default, you cannot modify a collection (insert, update, remove).
-We will have to specify specific behaviour for when the clients does
-have to  modify a collection 
-*/
 
 Meteor.methods({
 	createChat: function (other) {

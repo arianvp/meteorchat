@@ -3,22 +3,25 @@
 
 </head>
 <body>
+	{{>page}}
+</body>
 
+<template name="page">
+	{{#if showAddContactDialog}}
+		{{>addContactDialog}}
+	{{/if}}
+	{{#if currentUser}}
 	<aside id="side-menu">
 		<h1>Contacts</h1>
 		<menu id="contacts" label="contacts" type="list">
-			<button id="add-contact" type="button">Add contact</button>
-			{{> contacts}}
+			{{>contacts}}
 		</menu>
 		<h1>Settings</h1>
 		<menu id="settings" label="settings" type="list">
-			<li class="item" onclick="Meteor.logout()">
-				<a href="#" onclick="Meteor.logout()">
-					<span>Logout</span>
-				</a>
-			</li>
+			{{> settings}}
 		</menu>
 	</aside>
+	{{/if}}
 	<section id="main">
 		<header>
 			{{#if currentUser}}
@@ -33,7 +36,7 @@
 				</ol>
 				<form id="send-message-form">
 					<input onkeypress="return event.keyCode!=13" type="text" placeholder="Write message">
-					<button type="button">Send</button>
+					<button class="btn btn-primary" type="button">Send</button>
 					</input>
 				</form>
 			{{else}} <!-- if We're not logged in -->
@@ -47,17 +50,26 @@
 			{{/if}}
 		</div>
 	</section>
-</body>
+</template>
 
 
 <template name="contacts">
+	<button class="btn" id="add-contact" type="button">Add contact</button>
 	{{#each contacts}}
 		<li class="item">
-			<a href="#"><img src="http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=40" alt="">
+			<a href="#"><img src="{{gravatar}}?s=40" alt="">
 				<span>{{name}}</span>
 			</a>
 		</li>		
 	{{/each}}
+</template>
+
+<template name="settings">
+	<li class="item" onclick="Meteor.logout()">
+		<a href="#" onclick="Meteor.logout()">
+			<span>Logout</span>
+		</a>
+	</li>
 </template>
 
 <template name="messages">
@@ -76,4 +88,30 @@
 
 <template name="header">
 	<h1>{{username}}</h1>
+</template>
+
+
+<template name="addContactDialog">
+	<div class="modal-backdrop"></div>
+	<div class="modal">
+
+		<div class="modal-body">
+			{{#if error}}
+				<div class="alert alert-error">{{error}}</div>
+			{{/if}}
+
+			<form>
+			<fieldset>
+				<legend>Add contact</legend>
+				<label>
+					Email address
+					<input id="contact-email" type="email" required placeholder="Enter an email address…">
+				</label>
+
+				<button type="submit" class="submit btn btn-primary">Add</button>
+				<button class="btn cancel" type="button">Cancel</button>
+			</fieldset>
+			</form>
+		</div>
+	</div>
 </template>

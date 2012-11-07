@@ -8,3 +8,5 @@ backbone
 accounts-password
 accounts-ui-unstyled
 underscore
+bootstrap
+meteor-gravatar

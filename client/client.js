@@ -1,7 +1,9 @@
 
 Meteor.subscribe("userData");
 
+// Determines
 Handlebars.registerHelper("whichUser", function  (message) {
+  //TODO
   if (message.name === "Arian van Putten") {
     return "me";
   }  else {
@@ -47,17 +49,77 @@ Handlebars.registerHelper("prettyDate", function (date) {
   }
 });
 
+
+Template.page.showAddContactDialog = function () {
+  return !!Session.get("showAddContactDialog"); // !! is for null case, !!null === false
+};
+
+/*
+Handles page events
+*/
+Template.page.events = {
+  // if the page header is clicked, reveal the sidebar
+  "click #main > header" : function (e) {
+    $("#main, #side-menu, #main > header").toggleClass("slide");
+  }
+};
+
+Template.addContactDialog.events = {
+
+
+  "click .cancel" : function () {
+    Session.set("showAddContactDialog", false);
+  },
+  "click .submit" : function () {
+    var email = $("#contact-email").val();
+
+    var user = Meteor.users.findOne({
+      emails: {
+        $in: [
+          {address: email,verified:false}, //for debugging, cant verifiy in localhost
+          {address: email, verified:true}
+        ]
+      }
+    });
+
+    if (user) {
+      console.log(user);
+      Session.set("addContactError", undefined);
+      Session.set("showAddContactDialog", false);
+    } else {
+      Session.set("addContactError", "That user isn't using meteorchat yet!");
+    }
+  }
+};
+
+
+Template.addContactDialog.error = function () {
+  return Session.get("addContactError");
+};
+
 /*
  * Retreives the contactlist from the database and feeds it to
  * the contacts template, which will render the contacts in html
  */
 Template.contacts.contacts = function () {
-  return [  {name: "Dirk Maas"},
+
+  console.log(Meteor.user().contacts);
+  return [  {name: "Dirk Maas", gravatar: Gravatar.imageUrl("aeroboy94@gmail.com")},
             {name: "Joyce Vrenken"},
             {name: "Berend van Deelen"}
     ];
 };
 
+
+
+Template.contacts.events = {
+  "click #add-contact" : function (e) {
+    Session.set("showAddContactDialog", true);
+  }
+};
+
+
+//TODO
 /*
  * Retreives the messages of the current chat from the database
  * and feeds them to the messages template,
@@ -147,31 +209,7 @@ Router = new ChatsRouter();
 // gets called when the DOM is ready
 Meteor.startup(function () {
   // debug
-  $("#main > header").live('click', function() {
-    if (Meteor.user()) {
-      $("#main, #side-menu, #main > header").toggleClass('slide');
-    }
-  });
-  $("#login-button").live('click',function () {
-    console.log("Ik log nu in jeweetzelluf");
-    Meteor.loginWithPassword($("#email").val(), $("#password").val(), function (err) {
-      if (!err) {
 
-      }
-      console.log(err);
-    });
-  });
-
-  $("#login").live("click", function () {
-    Meteor.loginWithPassword($("#email").val(), $("#password").val(), function (err) {
-      if (err) {
-
-      }
-    });
-  });
-  $("#create").live("click", function () {
-
-  });
 
 
 });

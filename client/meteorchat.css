@@ -17,61 +17,16 @@ body {
 }
 
 
-input[type="text"], input[type="search"], input[type="email"], input[type="password"] {
-	padding: 4px;
-	border: 1px solid #999;
-	border-radius: 3px;
-	line-height: 30px;
-	font-size: 12px;
-}
 
-input:focus {
-	border-color: rgba(82, 168, 236, 0.8);
-	outline: 0;
-	/* IE6-9 */
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 66, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+h1, h2 {
+	font-size: 20px;
+	padding: 5px;
+	margin: 5px;
+	line-height: 24px;
 }
 
 
-button {
-	color: #fff;
-	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
 
-	background-color: #006dcc;
-	background-image: -o-linear-gradient(#08c, #04c);
-	background-image: -ms-linear-gradient(#08c, #04c);
-	background-image: -moz-linear-gradient(#08c, #04c);
-	background-image: -webkit-linear-gradient(#08c, #04c);
-	background-image: linear-gradient(#08c, #04c);
-
-	background-repeat: repeat-x;
-
-	padding: 4px;
-	border: 1px solid rgba(0,0,0,0.25);
-	border-radius: 3px;
-	line-height: 30px;
-	font-size: 14px;
-
-
-}
-
-button:hover {
-	-o-transition: 0.1s background-position linear;	
-	-ms-transition: 0.1s background-position lineart;	
-	-moz-transition: 0.1s background-position linear;
-	-webkit-transition: 0.1s background-position linear;
-	transition: 0.1s background-position linear;
-
-	background-position: 0 -15px;	
-}
-button:hover,
-button:active,
-button[disabled] {
-	color: #fff;
-	background-color: #04c;
-}
 
 /* side menu syling */
 #side-menu {
@@ -314,11 +269,12 @@ button[disabled] {
 	position: fixed;
 	left: 0;
 	right: 0;
-	bottom: 50px;
+	bottom: 10px;
 }
 
 #send-message-form > input {
 	position: absolute;
+	width: auto;
 	left: 0;
 	right: 60px;
 }
