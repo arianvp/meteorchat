@@ -1,0 +1,8 @@
+
+{
+  "packages": {
+    "meteor-gravatar": {
+    	"git": "https://github.com/tmeasday/meteor-gravatar.git"
+    }
+  }
+}

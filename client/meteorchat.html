@@ -7,9 +7,7 @@
 </body>
 
 <template name="page">
-	{{#if showAddContactDialog}}
-		{{>addContactDialog}}
-	{{/if}}
+
 	{{#if currentUser}}
 	<aside id="side-menu">
 		<h1>Contacts</h1>
@@ -54,22 +52,82 @@
 
 
 <template name="contacts">
-	<button class="btn" id="add-contact" type="button">Add contact</button>
+	<li class="item" id="add-contact">
+		<a href="#">
+			<span>Add contact</span>
+		</a>
+	</li>
 	{{#each contacts}}
 		<li class="item">
 			<a href="#"><img src="{{gravatar}}?s=40" alt="">
-				<span>{{name}}</span>
+				<span>{{profile.name}}</span>
 			</a>
 		</li>		
 	{{/each}}
 </template>
 
+<template name="addContactDialog">
+	<div class="modal-backdrop"></div>
+	<div class="modal">
+
+		<div class="modal-body">
+
+
+			<form>
+			<fieldset>
+				<legend>Add contact</legend>
+				{{#if error}}
+					<div class="alert alert-error">{{error}}</div>
+				{{/if}}
+				<label>
+					Email address
+					<input id="contact-email" type="email" required placeholder="Enter an email address…">
+				</label>
+
+			</fieldset>
+
+				<button type="button" class="submit btn btn-primary">Add</button>
+				<button class="btn cancel" type="button">Cancel</button>
+			</form>
+		</div>
+	</div>
+</template>
+
+
 <template name="settings">
+	<li class="item" id="edit-profile" class="item">
+		<a href="#">
+			<span>Edit profile</span>
+		</a>
+	</li>
 	<li class="item" onclick="Meteor.logout()">
 		<a href="#" onclick="Meteor.logout()">
 			<span>Logout</span>
 		</a>
 	</li>
+
+</template>
+
+<template name="editProfileDialog">
+	<div class="modal-backdrop">
+	</div>
+	<div class="modal">
+		<div class="modal-body">
+			<form>
+				<fieldset>
+					<legend>Profile settings</legend>
+					<label for="gravatar"></label>
+					<a class="gravatar" href="https://en.gravatar.com/emails">
+						<img class="img-polaroid" src="{{image}}">
+					</a>	
+					<label for="name">Name</label>
+					<input required id="name" type="text" placeholder="{{profile.name}}">
+				</fieldset>
+				<button type="button" class="submit btn btn-primary">Update</button>
+				<button class="btn cancel" type="button">Cancel</button>
+			</form>
+		</div>
+	</div>
 </template>
 
 <template name="messages">
@@ -90,28 +148,3 @@
 	<h1>{{username}}</h1>
 </template>
 
-
-<template name="addContactDialog">
-	<div class="modal-backdrop"></div>
-	<div class="modal">
-
-		<div class="modal-body">
-			{{#if error}}
-				<div class="alert alert-error">{{error}}</div>
-			{{/if}}
-
-			<form>
-			<fieldset>
-				<legend>Add contact</legend>
-				<label>
-					Email address
-					<input id="contact-email" type="email" required placeholder="Enter an email address…">
-				</label>
-
-				<button type="submit" class="submit btn btn-primary">Add</button>
-				<button class="btn cancel" type="button">Cancel</button>
-			</fieldset>
-			</form>
-		</div>
-	</div>
-</template>

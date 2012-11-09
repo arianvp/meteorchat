@@ -1,6 +1,29 @@
+/**
 
+NOTE about the storage API usage
+
+
+
+
+I've used sessionStorage instead of localStorage in the rest of the app for the following reason:
+ *  sessionStorage only spans a single 'session' so it only applies to one window.
+    Because my app is a single-page app, we don't share state amongst different pages, thus the localStorage is obsolete.
+    The assignment explicitly stated to use 'localStorage' and not 'sessionStorage'. But I am sure that this statement was
+    used to say "Use the HTML5 Storage API (http://www.html5rocks.com/en/features/storage)"  sessionStorage is part of this API
+
+    In my app, the sessionStorage object is wrapped in a Session object, but on the background it's the same. It's a compactibilty
+    layer to support more browsers.
+
+    Session is also reactive, it updates any component that uses it automatically.
+
+localStorage IS used to store the loginToken and userId.   because in the future, I might add more pages that require the user to be logged in
+**/
+/*
+Set up data subscriptions with the server.
+See server/server.js for more info on these subscriptions
+*/
 Meteor.subscribe("userData");
-
+Meteor.subscribe("allUserData");
 // Determines
 Handlebars.registerHelper("whichUser", function  (message) {
   //TODO
@@ -10,7 +33,6 @@ Handlebars.registerHelper("whichUser", function  (message) {
     return "he";
   }
 });
-
 /*
  * converts a date object in a readable version:
  * For example :
@@ -50,8 +72,13 @@ Handlebars.registerHelper("prettyDate", function (date) {
 });
 
 
+/* Dialog pop up control */
 Template.page.showAddContactDialog = function () {
   return !!Session.get("showAddContactDialog"); // !! is for null case, !!null === false
+};
+
+Template.page.showEditProfileDialog = function () {
+  return !!Session.get("showEditProfileDialog");
 };
 
 /*
@@ -60,38 +87,28 @@ Handles page events
 Template.page.events = {
   // if the page header is clicked, reveal the sidebar
   "click #main > header" : function (e) {
-    $("#main, #side-menu, #main > header").toggleClass("slide");
+    $("#main, #side-menu, #main > header, #send-message-form ").toggleClass("slide");
   }
 };
 
+
+/************** Contacts Menu **************/
 Template.addContactDialog.events = {
-
-
   "click .cancel" : function () {
     Session.set("showAddContactDialog", false);
   },
   "click .submit" : function () {
     var email = $("#contact-email").val();
-
-    var user = Meteor.users.findOne({
-      emails: {
-        $in: [
-          {address: email,verified:false}, //for debugging, cant verifiy in localhost
-          {address: email, verified:true}
-        ]
+    Meteor.call("addContact", email, function (error, result) {
+      if(error) {
+        Session.set("addContactError", error.reason);
+      } else {
+        Session.set("addContactError", undefined);
+        Session.set("showAddcontactDialog", false);
       }
     });
-
-    if (user) {
-      console.log(user);
-      Session.set("addContactError", undefined);
-      Session.set("showAddContactDialog", false);
-    } else {
-      Session.set("addContactError", "That user isn't using meteorchat yet!");
-    }
   }
 };
-
 
 Template.addContactDialog.error = function () {
   return Session.get("addContactError");
@@ -102,21 +119,53 @@ Template.addContactDialog.error = function () {
  * the contacts template, which will render the contacts in html
  */
 Template.contacts.contacts = function () {
-
-  console.log(Meteor.user().contacts);
-  return [  {name: "Dirk Maas", gravatar: Gravatar.imageUrl("aeroboy94@gmail.com")},
-            {name: "Joyce Vrenken"},
-            {name: "Berend van Deelen"}
-    ];
+  return _.map(_.map(Meteor.user().contacts, function (id) {return Meteor.users.findOne(id);}), function (contact) {
+    //TODO , set avatar to preselected by user thingy
+    contact.gravatar = Gravatar.imageUrl(contact.emails[0].address);
+    contact.profile = contact.profile || {};
+    contact.profile.name = contact.profile.name || contact.emails[0].address;
+    return contact;
+  });
 };
-
-
 
 Template.contacts.events = {
   "click #add-contact" : function (e) {
     Session.set("showAddContactDialog", true);
   }
 };
+
+
+/************* Settings Menu *********/
+Template.editProfileDialog.image = function () {
+  if (Meteor.userLoaded()) {
+    return Gravatar.imageUrl(Meteor.user().emails[0].address);
+  }
+};
+
+Template.editProfileDialog.profile = function () {
+  if (Meteor.userLoaded()) {
+    return Meteor.user().profile || {name:Meteor.user().emails[0].address};
+  }
+};
+
+Template.editProfileDialog.events = {
+
+  "click .cancel" : function () {
+    Session.set("showEditProfileDialog", false);
+  },
+  "click .submit" : function () {
+    var name = $("#name").val();
+    Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.name": name}}, true);
+  }
+
+};
+
+Template.settings.events = {
+  "click #edit-profile" : function () {
+    Session.set("showEditProfileDialog", true);
+  }
+};
+
 
 
 //TODO
@@ -193,7 +242,6 @@ var ChatsRouter = Backbone.Router.extend({
   // the main router function
   main: function (chatId) {
     Session.set("chatId", chatId);
-    Session.set("searchFilter", null);
   },
 
   // a helper function to navigate to a specific chat

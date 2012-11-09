@@ -113,11 +113,16 @@ h1, h2 {
 }
 
 #add-contact {
+
 	position: absolute;
-	top: 28px;
-	height: 26px;
-	left: 5px;
-	right: 5px;
+	top: 22px;
+	height: 40px;
+	left: 0;
+	right: 0;
+}
+
+#add-contact > a {
+	padding-top: 10px;
 }
 
 #side-menu,
@@ -128,6 +133,11 @@ h1, h2 {
 	/* the transition type and speed are set.
  	* the transform type allows us
  	*/
+}
+#side-menu,
+#main,
+#main > header,
+#send-message-form {
 	-o-transition: 0.3 left;	
 	-ms-transition: 0.3s left;	
 	-moz-transition: 0.3s left;
@@ -150,6 +160,9 @@ h1, h2 {
 
 }
 
+#send-message-form.slide {
+	left: 260px;
+}
 
 /* main screen styling */
 #main {
