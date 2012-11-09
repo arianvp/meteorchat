@@ -1,6 +1,6 @@
 <head>
 	<title>Meteorchat</title>
-
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 	{{>page}}
@@ -19,35 +19,17 @@
 			{{> settings}}
 		</menu>
 	</aside>
+	{{#if showEditProfileDialog}}
+	{{> editProfileDialog}}
 	{{/if}}
-	<section id="main">
-		<header>
-			{{#if currentUser}}
-				{{>header}}
-			{{/if}}
-		</header>
-		<div id="content">
-			{{#if currentUser}}
-				<ol id="messages"><!-- an ordered list of messages, ordered by time -->
-					{{> messages}}
-					
-				</ol>
-				<form id="send-message-form">
-					<input onkeypress="return event.keyCode!=13" type="text" placeholder="Write message">
-					<button class="btn btn-primary" type="button">Send</button>
-					</input>
-				</form>
-			{{else}} <!-- if We're not logged in -->
-				<!--<form>
-					<input id="email" type="email" placeholder="Email">
-					<input id="password" type="password" placeholder="Password">
-					<button id="login" type="button">Login</button>
-					<button id="create" type="button">Create</button>
-				</form>-->
-				{{loginButtons}}
-			{{/if}}
-		</div>
-	</section>
+	{{#if showAddContactDialog}}
+	{{> addContactDialog}}
+	{{/if}}
+	{{> chat}}
+	{{else}}
+		<div class="well">{{loginButtons}}</div>
+
+	{{/if}}
 </template>
 
 
@@ -59,7 +41,7 @@
 	</li>
 	{{#each contacts}}
 		<li class="item">
-			<a href="#"><img src="{{gravatar}}?s=40" alt="">
+			<a href="/{{_id}}"><img src="{{gravatar}}?s=40" alt="">
 				<span>{{profile.name}}</span>
 			</a>
 		</li>		
@@ -130,21 +112,44 @@
 	</div>
 </template>
 
-<template name="messages">
-	{{#each messages}}
-		<li class="{{whichUser this}}">
-			<article>
-				<header>
-					<h2>{{name}}</h2>
-					<time pubtime datetime="{{timestamp}}">{{prettyDate timestamp}}</time>
-				</header>
-				<p>{{text}}</p>
-			</article>
-		</li>
-	{{/each}}
-</template>
+<template name="chat">
+	<section id="main">
+		<header>
+			<h1>{{{he.profile.name}}</h1>
+		</header>
+		<div id="content">
+				<ol id="messages">
+					{{#each chat.messages}}
+						{{#if isMe sender}}
+						<li class="me">
+							<article>
+								<header>
+									<h2>{{me.profile.name}}</h2>
+									<time pubtime datetime="{{timestamp}}">{{prettyDate timestamp}}</time>
+								</header>
+								<p>{{text}}</p>
+							</article>
+						</li>			
+						{{else}}
+						<li class="he">
+							<article>
+								<header>
+									<h2>{{he.profile.name}}</h2>
+									<time pubtime datetime="{{timestamp}}">{{prettyDate timestamp}}</time>
+								</header>
+								<p>{{text}}</p>
+							</article>
+						</li>		
+						{{/if}}
+					{{/each}}
+				</ol>
+				<form id="send-message-form">
+					<input onkeypress="return event.keyCode!=13" type="text" placeholder="Write message" required>
+					<button class="submit btn btn-primary" type="button">Send</button>
 
-<template name="header">
-	<h1>{{username}}</h1>
+				</form>
+
+		</div>
+	</section>	
 </template>
 

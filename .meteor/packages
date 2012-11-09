@@ -6,7 +6,8 @@
 preserve-inputs
 backbone
 accounts-password
-accounts-ui-unstyled
 underscore
 bootstrap
 meteor-gravatar
+less
+accounts-ui-unstyled

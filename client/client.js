@@ -46,7 +46,7 @@ Handlebars.registerHelper("whichUser", function  (message) {
  *   * x weeks ago
  */
 Handlebars.registerHelper("prettyDate", function (date) {
-
+  date = new Date(date);
   var now = new Date();
   var difference = (now.getTime() - date.getTime()) / 1000;
   var dayDifference = Math.floor(difference / 86400);
@@ -104,7 +104,7 @@ Template.addContactDialog.events = {
         Session.set("addContactError", error.reason);
       } else {
         Session.set("addContactError", undefined);
-        Session.set("showAddcontactDialog", false);
+        Session.set("showAddContactDialog", false);
       }
     });
   }
@@ -156,6 +156,7 @@ Template.editProfileDialog.events = {
   "click .submit" : function () {
     var name = $("#name").val();
     Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.name": name}}, true);
+    Session.set("showEditProfileDialog", false);
   }
 
 };
@@ -168,67 +169,84 @@ Template.settings.events = {
 
 
 
-//TODO
-/*
- * Retreives the messages of the current chat from the database
- * and feeds them to the messages template,
- * which will render the messages in html
- */
-Template.messages.messages = function () {
-  return [
-    {
-      name: "Dirk Maas",
-      timestamp: new Date(),
-      text: "Whadduppppp"
-    },
-    {
-      name: "Arian van Putten",
-      timestamp: new Date(),
-      text: "Heyyyyy"
-    },
-    {
-      name: "Dirk Maas",
-      timestamp: new Date(),
-      text: "Trolololol"
-    },
-    {
-      name: "Dirk Maas",
-      timestamp: new Date(),
-      text: "Trolololol"
-    },
-    {
-      name: "Dirk Maas",
-      timestamp: new Date(),
-      text: "Trolololol"
-    },
-    {
-      name: "Dirk Maas",
-      timestamp: new Date(),
-      text: "Trolololol"
-    },
-    {
-      name: "Dirk Maas",
-      timestamp: new Date(),
-      text: "Trolololol"
-    },
-    {
-      name: "Dirk Maas",
-      timestamp: new Date(),
-      text: "Trolololol"
+
+
+Session.set("contactId", null);
+
+
+Meteor.subscribe("chats");
+Meteor.autosubscribe(function () {
+  var contactId = Session.get("contactId");
+  if (contactId) {
+    Meteor.subscribe("chats", contactId);
+  }
+});
+
+Template.chat.he = function () {
+  var contactId = Session.get("contactId");
+
+  var he =  Meteor.users.findOne({_id:contactId});
+  if (he) {
+    he.gravatar = Gravatar.imageUrl(he.emails[0].address);
+    he.profile = he.profile || {};
+    he.profile.name = he.profile.name || he.emails[0].address;
+    return he;
+  }
+  return "Chat";
+};
+
+Template.chat.me = function () {
+  if (Meteor.userLoaded()) {
+    var me = Meteor.user();
+    me.gravatar = Gravatar.imageUrl(me.emails[0].address);
+    me.profile = me.profile || {};
+    me.profile.name = me.profile.name || me.emails[0].address;
+    return me;
+  }
+};
+
+
+Template.chat.chat = function () {
+  var contactId = Session.get("contactId");
+  var chat = Chats.findOne({participants:contactId});
+  return chat;
+};
+
+Template.chat.isMe = function (id) {
+  return id == Meteor.userId();
+};
+
+Template.chat.events = {
+  "click #send-message-form > .submit" : function () {
+    var text = $("#send-message-form > input").val();
+    if (!text.length) { return; }
+    var contactId = Session.get("contactId");
+      if (!Chats.findOne({participants:{$all:[contactId, Meteor.userId()]}})) {
+        Chats.insert({
+          participants:[contactId, Meteor.userId()],
+          messages:[{
+            sender: Meteor.userId(),
+            timestamp:new Date(),
+            text:text}]});
+      }
+      else {
+    Chats.update({participants:{$all:[contactId, Meteor.userId()]}},
+      {$push:{messages:{
+        sender: Meteor.userId(),
+        timestamp:new Date(),
+        text:text}}},
+    true);
+     }
+  }
+};
+
+Template.chat.rendered = function () {
+    if($("#side-menu.slide").length) {
+      $("#main, #main>header,#send-message-form").addClass("slide");
     }
-
-
-
-
-
-
-  ];
+  
 };
 
-
-Template.header.username = function () {
-  return "Dirk Maas";
-};
 /* The Chats Router
  * It will handle requests to URLs in the form of /:chatId,
  * set the current chat id in localStorage to the chatId of the URL,
@@ -236,17 +254,17 @@ Template.header.username = function () {
  */
 var ChatsRouter = Backbone.Router.extend({
   routes: {
-    ":chatId": "main"
+    ":contactId": "main"
   },
 
   // the main router function
-  main: function (chatId) {
-    Session.set("chatId", chatId);
+  main: function (contactId) {
+    Session.set("contactId", contactId);
   },
 
   // a helper function to navigate to a specific chat
-  setChat: function (chatId) {
-    this.navigate(chatId, true);
+  setChat: function (contactId) {
+   // this.navigate(contactId, true);
   }
 });
 
@@ -256,8 +274,5 @@ Router = new ChatsRouter();
 
 // gets called when the DOM is ready
 Meteor.startup(function () {
-  // debug
-
-
-
+  Backbone.history.start({pushState: true});
 });

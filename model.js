@@ -1,4 +1,4 @@
-Chats = new Meteor.Collection("Chats");
+Chats = new Meteor.Collection("chats");
 /*
 By default, you cannot modify a collection (insert, update, remove).
 We will have to specify specific behaviour for when the clients does
@@ -7,42 +7,23 @@ have to  modify a collection
 
 Chats.allow({
 	insert: function (userId, chat) {
-		
+		return _.all(chat.participants, function (part) {
+			return part !== "" || part !== undefined || part !== null;
+		});
 	},
 	update: function (userId, chats, fields, modifier) {
-		return _.contains(chat.participants, userId) && _.size(chat.participants) == 2;
+		return _.all(chats, function (chat) {
+			return _.contains(chat.participants, userId);
+		});
 	},
 
 	// for this moment, you cannot remove chat messages
 	remove: function (userId, chat) {
 		return false;
-	}
-});
-
-//TODO, zie client.js, hier die shizzle stoppen :)
-Meteor.users.allow({
-	update: function (userId, users, fields, modifier) {
-
-		throw new Meteor.error(fields);
-		// _.all(users, function (user) {
-
-		// 	//
-		// 	if (_.contains(user.contacts, userId)) {
-
-		// 	}
-		// });
-		// throw new Meteor.Error("YO DAWG");
-		// return false;
-
-
-
-		//TODO "You already have this contact!"
-		//TODO "You can't add yourself!"
-		//TODO "That user isn't using meteorchat yet!"
 	},
-
-	fetch : ["contacts"]
+	fetch: ["participants", "messages"]
 });
+
 
 
 /* define RPC calls
@@ -77,7 +58,6 @@ Meteor.methods({
 		if (Meteor.userId() == newContact._id) {
 			throw new Meteor.Error(400, "You cannot add yourself!");
 		}
-
 
 		return Meteor.users.update({_id:Meteor.userId()}, {$push: {contacts : newContact._id}}, true);
 	}
