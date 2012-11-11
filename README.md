@@ -72,7 +72,6 @@ On Google Chrome for Android 4.1 the following bug has occured:
 
 
 
-
 Meteor
 ======
 

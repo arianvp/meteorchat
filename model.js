@@ -1,3 +1,11 @@
+
+/**
+ *
+ * Model.js is a shared file. Both the client and the server run this script.
+ * It sets up rules on how data should be read.
+ *
+ */
+
 /*
  * Chats collection is saved in the database as follows:
  * {
