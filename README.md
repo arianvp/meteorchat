@@ -1,6 +1,24 @@
 The App
 =======
 
+Usage
+-----
+When prompted to sign in, create a new account.
+![create acc](http://i.imgur.com/6aCUZ.png)
+
+Hitting the top bar wil reveal the side-menu:
+![side](http://i.imgur.com/yjpY4.png)
+
+Add contacts by hitting the add contact button:
+![add](http://i.imgur.com/CHkRi.png)
+
+click on someone on your contacts list to chat with them!
+![chat](http://i.imgur.com/NKL8L.png)
+
+Click edit profile in the side-menu to change your name and/or profile picture (uses gravatar)
+![profile](http://i.imgur.com/nqfuK.png)
+
+Happy chatting!
 Short description of functions called
 -------------------------------------
 Many many many functions are called. Enumerating them here would be redundant. The code is well documented and for
