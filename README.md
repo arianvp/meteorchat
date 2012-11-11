@@ -1,6 +1,14 @@
 The App
 =======
 
+Short description of functions called
+-------------------------------------
+[Docs](http://docs.meteor.com/)
+
+
+About
+-----
+
 I've written a HTML5/CSS3 chat application which runs on the [Meteor](http://meteor.com) platform.
 You can change your profile picture, profile name, add new contacts and send messages to them.
 
@@ -28,10 +36,19 @@ contacts.
 
 
 Known bugs
-----------
+==========
 When a message is sent, the timestamp is set on the clientside. If the clocks of two chatters aren't in sync,
 the timestamp might look invalid for the receiving end. This can be fixed by settings timestamps on the serverside
 when synchronizing the local database with the server database.
+
+If no chat is specifically opened (the state you're in after log in), there's still a chat window visible in
+which you can send messages, whilst those messages aren't received by anyone in particular.
+
+
+On Google Chrome for Android 4.1 the following bug has occured:
+    When the side-menu is open, the app works fine. You can send messages, scroll through messages etc
+    When the side-menu is closed, the scrolling through the app breaks. Haven't been able to find out why yet.
+
 
 
 
