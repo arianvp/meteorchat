@@ -1,3 +1,26 @@
+<!--
+We're using HTML + the template language Handlebars.
+
+
+{{> test}} loads the template 'test'. which has data bindings in the client.js code
+
+for example:
+
+Template code:
+<template name="test">
+ <h1>{{data}}</h1>
+ </template>
+
+js code:
+Template.test.data = function () { return "Hello, World!"; }
+
+The templating engine wil automatically generate the following :
+
+<h1>Hello, World!</h1>
+
+
+
+-->
 <head>
 	<title>Meteorchat</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,6 +29,10 @@
 	{{>page}}
 </body>
 
+<!-- top-level template
+It has some events bound in the javascript code that handle revealing dialogs etc.
+
+-->
 <template name="page">
 
 	{{#if currentUser}}
@@ -18,7 +45,12 @@
 		<menu id="settings" label="settings" type="list">
 			{{> settings}}
 		</menu>
-	</aside>
+        </aside>
+
+        <!-- These are conditinal template loaders of the dialogs
+             so if we set "showEditProfileDialog" to true in the javascript,
+             the editProfileDialog template will be loaded, yielding a profile editing dialog
+        -->
 	{{#if showEditProfileDialog}}
 	{{> editProfileDialog}}
 	{{/if}}
@@ -26,19 +58,24 @@
 	{{> addContactDialog}}
 	{{/if}}
 	{{> chat}}
-	{{else}}
+        {{else}}
+        <!-- if we're not logged in, the page template will load a built-in login form -->
 		<div class="well">{{loginButtons}}</div>
 
 	{{/if}}
 </template>
 
-
+<!-- loads contacts list in the side-menu -->
 <template name="contacts">
 	<li class="item" id="add-contact">
 		<a href="#">
 			<span>Add contact</span>
 		</a>
-	</li>
+        </li>
+        
+        <!-- _id is the key for a contact, used to load a certain chat
+        We've set up a backbone router in javascript (client/client.js) that will detect
+        these kind of links and open te corresponding chat -->
 	{{#each contacts}}
 		<li class="item">
 			<a href="/{{_id}}"><img src="{{gravatar}}?s=40" alt="">
@@ -48,6 +85,7 @@
 	{{/each}}
 </template>
 
+<!-- the template for the contact dialog -->
 <template name="addContactDialog">
 	<div class="modal-backdrop"></div>
 	<div class="modal">
@@ -75,7 +113,7 @@
 	</div>
 </template>
 
-
+<!-- settings in the side-menu -->
 <template name="settings">
 	<li class="item" id="edit-profile" class="item">
 		<a href="#">
@@ -90,6 +128,7 @@
 
 </template>
 
+<!-- edit profile dialog -->
 <template name="editProfileDialog">
 	<div class="modal-backdrop">
 	</div>
@@ -112,6 +151,11 @@
 	</div>
 </template>
 
+<!-- main chat window template,
+{{#if isMe sender}} will compare the sender of the message to the current userId, so we can decided
+what style class (he/me) to appl
+
+prettyDate will print the date in human-readable form. see client/client.js for how it works! -->
 <template name="chat">
 	<section id="main">
 		<header>

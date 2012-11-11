@@ -51,7 +51,9 @@ Meteor.methods({
 		if (!email.match(/.+@.+/)) {
 			throw new Meteor.Error(400, "Invalid email address was sent");
 		}
-
+                
+                // search for a contact that has the email address that the client entered in the
+                // add contact dialog
 		var newContact = Meteor.users.findOne({
 			emails: {
 				$in: [
@@ -61,14 +63,18 @@ Meteor.methods({
 			}
 		});
 
+                // we'll have to check if this contact is already a meteorchat user, otherwise report not.
 		if (!newContact) {
 			throw new Meteor.Error(404, "This contact isn't using meteorchat yet!");
 		}
 
+                // if your contactlist already contains this contact, this should be considered an error
+                // you shouldn't be able to add the same contact twice.
 		if (_.contains(Meteor.user().contacts, newContact._id)) {
 			throw new Meteor.Error(400, "You've already added this contact!");
 		}
 
+                //you cannot add yourself...
 		if (Meteor.userId() == newContact._id) {
 			throw new Meteor.Error(400, "You cannot add yourself!");
 		}

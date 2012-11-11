@@ -126,13 +126,17 @@ Template.contacts.contacts = function () {
    * the result is an array of real contact objects. we then map these to a modifer function
    * which will add extra fields (like generated profile picture URL)  to the real contact objects
    */
-  return _.map(_.map(Meteor.user().contacts, function (id) {return Meteor.users.findOne(id);}), function (contact) {
-    //TODO , set avatar to preselected by user thingy
-    contact.gravatar = Gravatar.imageUrl(contact.emails[0].address);
-    contact.profile = contact.profile || {};
-    contact.profile.name = contact.profile.name || contact.emails[0].address;
-    return contact;
-  });
+  return _.map(
+          _.map(Meteor.user().contacts, function (id) {
+              return Meteor.users.findOne(id);
+          }),
+          function (contact) {
+            //TODO , set avatar to preselected by user thingy
+            contact.gravatar = Gravatar.imageUrl(contact.emails[0].address);
+            contact.profile = contact.profile || {};
+            contact.profile.name = contact.profile.name || contact.emails[0].address;
+            return contact;
+        });
 };
 
 /* Listen for clicks on the add-contact button. if clicked, open the add-contact-dialog */
@@ -222,7 +226,7 @@ Template.chat.me = function () {
   }
 };
 
-
+/* binds the chat object to the template */
 Template.chat.chat = function () {
   var contactId = Session.get("contactId");
   /* find the chat which we selected, in the database */
@@ -237,6 +241,8 @@ Template.chat.isMe = function (id) {
 };
 
 
+/*
+ * Handle sending chat messages */
 Template.chat.events = {
   "click #send-message-form > .submit" : function () {
     var text = $("#send-message-form > input").val();
@@ -302,5 +308,6 @@ Router = new ChatsRouter();
 
 // gets called when the DOM is ready
 Meteor.startup(function () {
+  //fire up the Backbone router engine
   Backbone.history.start({pushState: true});
 });
