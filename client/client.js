@@ -64,12 +64,13 @@ Handlebars.registerHelper("prettyDate", function (date) {
 
 
 /* Dialog pop up control */
-/* A reactive resource for the html template, when the Session object changes, the template re-renders*/
+/* A reactive resource for the html template, when the Session object changes, the template re-renders, thus
+ * will cause the contact-dialog to render*/
 Template.page.showAddContactDialog = function () {
   return !!Session.get("showAddContactDialog"); // !! is for null case, !!null === false
 };
 
-/* Idem dito */
+/* Idem dito for the profile dialog */
 Template.page.showEditProfileDialog = function () {
   return !!Session.get("showEditProfileDialog");
 };
@@ -119,6 +120,12 @@ Template.addContactDialog.error = function () {
  * the contacts template, which will render the contacts in html
  */
 Template.contacts.contacts = function () {
+  /* some high order functional programming magic
+   * a map is of type [a] -> [a]. it transforms an array into a different array
+   * we start with user().contacts, a list of contact keys. we map this to the findOne(id) function
+   * the result is an array of real contact objects. we then map these to a modifer function
+   * which will add extra fields (like generated profile picture URL)  to the real contact objects
+   */
   return _.map(_.map(Meteor.user().contacts, function (id) {return Meteor.users.findOne(id);}), function (contact) {
     //TODO , set avatar to preselected by user thingy
     contact.gravatar = Gravatar.imageUrl(contact.emails[0].address);
@@ -189,6 +196,8 @@ Meteor.autosubscribe(function () {
   }
 });
 
+/*
+ * binds template data to the li that contains the message from the contact */
 Template.chat.he = function () {
   var contactId = Session.get("contactId");
 
@@ -202,6 +211,7 @@ Template.chat.he = function () {
   return "Chat";
 };
 
+/* binds template data to the li that contains a message that you sent */ 
 Template.chat.me = function () {
   if (Meteor.userLoaded()) {
     var me = Meteor.user();
