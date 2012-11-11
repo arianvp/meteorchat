@@ -3,6 +3,8 @@ The App
 
 Short description of functions called
 -------------------------------------
+Many many many functions are called. Enumerating them here would be redundant. The code is well documented and for
+any unclarities, you can always refer to the Meteor framework documentation. 
 [Docs](http://docs.meteor.com/)
 
 
