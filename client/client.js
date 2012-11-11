@@ -73,16 +73,18 @@ Handlebars.registerHelper("prettyDate", function (date) {
 
 
 /* Dialog pop up control */
+/* A reactive resource for the html template, when the Session object changes, the template re-renders*/
 Template.page.showAddContactDialog = function () {
   return !!Session.get("showAddContactDialog"); // !! is for null case, !!null === false
 };
 
+/* Idem dito */
 Template.page.showEditProfileDialog = function () {
   return !!Session.get("showEditProfileDialog");
 };
 
 /*
-Handles page events
+Handles page events to open the sidebar etc
 */
 Template.page.events = {
   // if the page header is clicked, reveal the sidebar
@@ -94,9 +96,13 @@ Template.page.events = {
 
 /************** Contacts Menu **************/
 Template.addContactDialog.events = {
+
+  /* close the contact menu */
   "click .cancel" : function () {
     Session.set("showAddContactDialog", false);
   },
+  
+  /* submit changes, and then close menu */
   "click .submit" : function () {
     var email = $("#contact-email").val();
     Meteor.call("addContact", email, function (error, result) {
@@ -110,6 +116,9 @@ Template.addContactDialog.events = {
   }
 };
 
+/* reactive data source callled. if in the addContactDialog eventhander, an error is caught,
+ * this is template resource will change, causing a template redraw, so the error can be displayed
+ * to the user */
 Template.addContactDialog.error = function () {
   return Session.get("addContactError");
 };
@@ -128,6 +137,7 @@ Template.contacts.contacts = function () {
   });
 };
 
+/* Listen for clicks on the add-contact button. if clicked, open the add-contact-dialog */
 Template.contacts.events = {
   "click #add-contact" : function (e) {
     Session.set("showAddContactDialog", true);
@@ -136,12 +146,15 @@ Template.contacts.events = {
 
 
 /************* Settings Menu *********/
+
+/* sets the polaroid image to the corresponding avatar from the gravatar database */
 Template.editProfileDialog.image = function () {
   if (Meteor.userLoaded()) {
     return Gravatar.imageUrl(Meteor.user().emails[0].address);
   }
 };
 
+/* If no name is set, display an email placeholder */
 Template.editProfileDialog.profile = function () {
   if (Meteor.userLoaded()) {
     return Meteor.user().profile || {name:Meteor.user().emails[0].address};
@@ -149,10 +162,11 @@ Template.editProfileDialog.profile = function () {
 };
 
 Template.editProfileDialog.events = {
-
+  /* close the dialog */
   "click .cancel" : function () {
     Session.set("showEditProfileDialog", false);
   },
+  /* submit the changes, then close dialog */
   "click .submit" : function () {
     var name = $("#name").val();
     Meteor.users.update({_id:Meteor.userId()}, {$set:{"profile.name": name}}, true);
@@ -173,7 +187,8 @@ Template.settings.events = {
 
 Session.set("contactId", null);
 
-
+/* **
+ * Subscribe to the 'chats' data publisher (see server/server.js)  to receive data about chats */
 Meteor.subscribe("chats");
 Meteor.autosubscribe(function () {
   var contactId = Session.get("contactId");
@@ -225,7 +240,7 @@ Template.chat.events = {
         Chats.insert({
           participants:[contactId, Meteor.userId()],
           messages:[{
-            sender: Meteor.userId(),
+            sender: Meteor.userId()
             timestamp:new Date(),
             text:text}]});
       }
