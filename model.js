@@ -1,3 +1,17 @@
+/*
+ * Chats collection is saved in the database as follows:
+ * {
+ *  participants : [User],
+ *  messages: [
+ *      sender: User,
+ *      timestamp: Date,
+ *      text: String
+ *  ]
+ *  
+ * }
+ * 
+ */
+
 Chats = new Meteor.Collection("chats");
 /*
 By default, you cannot modify a collection (insert, update, remove).
@@ -58,7 +72,7 @@ Meteor.methods({
 		if (Meteor.userId() == newContact._id) {
 			throw new Meteor.Error(400, "You cannot add yourself!");
 		}
-
+                // add the contact
 		return Meteor.users.update({_id:Meteor.userId()}, {$push: {contacts : newContact._id}}, true);
 	}
 });

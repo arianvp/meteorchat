@@ -24,15 +24,6 @@ See server/server.js for more info on these subscriptions
 */
 Meteor.subscribe("userData");
 Meteor.subscribe("allUserData");
-// Determines
-Handlebars.registerHelper("whichUser", function  (message) {
-  //TODO
-  if (message.name === "Arian van Putten") {
-    return "me";
-  }  else {
-    return "he";
-  }
-});
 /*
  * converts a date object in a readable version:
  * For example :
@@ -175,6 +166,7 @@ Template.editProfileDialog.events = {
 
 };
 
+/* event to open the edit-profile-dialog */
 Template.settings.events = {
   "click #edit-profile" : function () {
     Session.set("showEditProfileDialog", true);
@@ -223,19 +215,27 @@ Template.chat.me = function () {
 
 Template.chat.chat = function () {
   var contactId = Session.get("contactId");
+  /* find the chat which we selected, in the database */
   var chat = Chats.findOne({participants:contactId});
   return chat;
 };
 
+/* a helper function that is used to determine style in the template *
+ * (wether or not the balloon should be pointed left or right) */
 Template.chat.isMe = function (id) {
   return id == Meteor.userId();
 };
 
+
 Template.chat.events = {
   "click #send-message-form > .submit" : function () {
     var text = $("#send-message-form > input").val();
-    if (!text.length) { return; }
+    if (!text.length) { return; } //if nothing was entered
+
+
     var contactId = Session.get("contactId");
+
+    // if the chat didn't exist yet, create it
       if (!Chats.findOne({participants:{$all:[contactId, Meteor.userId()]}})) {
         Chats.insert({
           participants:[contactId, Meteor.userId()],
@@ -244,6 +244,7 @@ Template.chat.events = {
             timestamp:new Date(),
             text:text}]});
       }
+      // otherwise append the message to the existing chat
       else {
     Chats.update({participants:{$all:[contactId, Meteor.userId()]}},
       {$push:{messages:{
@@ -255,6 +256,8 @@ Template.chat.events = {
   }
 };
 
+
+// fixes some problems with class resets in the template render engine
 Template.chat.rendered = function () {
     if($("#side-menu.slide").length) {
       $("#main, #main>header,#send-message-form").addClass("slide");
