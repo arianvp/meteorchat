@@ -1,6 +1,7 @@
 The App
 =======
 
+Live demo : http://meteorchat.arianvp.meteor.com/
 Usage
 -----
 When prompted to sign in, create a new account.
